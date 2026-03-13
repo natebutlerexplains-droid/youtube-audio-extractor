@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Audio Extractor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>🎧 YouTube Audio Extractor</h1>
+        <p class="subtitle">Paste a YouTube URL, extract the audio, trim it, and download.</p>
+
+        <!-- Step 1: URL Input -->
+        <div class="card">
+            <label for="urlInput">YouTube URL</label>
+            <input 
+                type="text" 
+                id="urlInput" 
+                placeholder="https://www.youtube.com/watch?v=..." 
+            />
+            <button id="extractBtn">Extract Audio</button>
+        </div>
+
+        <!-- Step 2: Status Message -->
+        <div id="status" class="status hidden"></div>
+
+        <!-- Step 3: Waveform (hidden until audio is ready) -->
+        <div id="waveformSection" class="card hidden">
+            <label>Waveform</label>
+            <div id="waveform"></div>
+
+            <div class="trim-controls">
+                <div class="trim-input">
+                    <label for="startTime">Start (seconds)</label>
+                    <input type="number" id="startTime" value="0" min="0" />
+                </div>
+                <div class="trim-input">
+                    <label for="endTime">End (seconds)</label>
+                    <input type="number" id="endTime" value="30" min="1" />
+                </div>
+            </div>
+
+            <button id="trimBtn">Trim & Download</button>
+        </div>
+    </div>
+
+    <!-- WaveSurfer.js -->
+    <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
