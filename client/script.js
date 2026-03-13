@@ -8,8 +8,10 @@ const endTimeInput = document.getElementById('endTime');
 const trimBtn = document.getElementById('trimBtn');
 const playBtn = document.getElementById('playBtn');
 
-// WaveSurfer instance
+// WaveSurfer instance and region
 let wavesurfer = null;
+let regions = null;
+let activeRegion = null;
 
 // Show status messages
 function showStatus(message, type = 'info') {
@@ -18,11 +20,14 @@ function showStatus(message, type = 'info') {
     statusDiv.classList.remove('hidden');
 }
 
-// Initialize WaveSurfer
+// Initialize WaveSurfer with Regions plugin
 function initWaveSurfer() {
     if (wavesurfer) {
         wavesurfer.destroy();
     }
+
+    // Create regions plugin
+    regions = WaveSurfer.Regions.create();
 
     wavesurfer = WaveSurfer.create({
         container: '#waveform',
@@ -33,12 +38,33 @@ function initWaveSurfer() {
         barGap: 1,
         height: 100,
         normalize: true,
+        plugins: [regions],
     });
 
     wavesurfer.on('ready', () => {
         const duration = wavesurfer.getDuration();
         endTimeInput.value = Math.floor(duration);
-        showStatus('Audio loaded! Press Play to preview, then set trim points and download.', 'success');
+
+        // Draw default region covering first 30 seconds (or full track)
+        const defaultEnd = Math.min(30, duration);
+        activeRegion = regions.addRegion({
+            start: 0,
+            end: defaultEnd,
+            color: 'rgba(255, 59, 59, 0.2)',
+            drag: true,
+            resize: true,
+        });
+
+        startTimeInput.value = 0;
+        endTimeInput.value = Math.floor(defaultEnd);
+
+        showStatus('Audio loaded! Drag the region handles to set trim points, then click Trim & Download.', 'success');
+    });
+
+    // Update input fields when region is updated
+    regions.on('region-updated', (region) => {
+        startTimeInput.value = region.start.toFixed(2);
+        endTimeInput.value = region.end.toFixed(2);
     });
 
     // Update play button text when audio finishes
