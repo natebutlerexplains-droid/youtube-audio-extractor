@@ -50,7 +50,7 @@ function initWaveSurfer() {
         activeRegion = regions.addRegion({
             start: 0,
             end: defaultEnd,
-            color: 'rgba(255, 59, 59, 0.2)',
+            color: 'rgba(59, 130, 246, 0.35)',
             drag: true,
             resize: true,
         });
